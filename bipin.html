@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VBSPU - Smart Geofence Attendance Portal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-gradient: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #ec4899 100%);
+      --accent-gradient: linear-gradient(135deg, #06b6d4, #3b82f6);
+      --card-bg: rgba(255, 255, 255, 0.95);
+      --text-dark: #1e1b4b;
+      --text-muted: #64748b;
+      --success-glow: #10b981;
+      --danger-glow: #ef4444;
+      --radius: 16px;
+      --shadow: 0 12px 30px rgba(79, 70, 229, 0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #e0e7ff 0%, #f5f3ff 50%, #fdf2f8 100%);
+      color: var(--text-dark);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px 14px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 500px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* Hero Banner with Picture */
+    .hero-banner {
+      position: relative;
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      height: 160px;
+      background: #312e81;
+    }
+
+    .hero-banner img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: brightness(0.65);
+    }
+
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 16px;
+      color: #ffffff;
+    }
+
+    .hero-badge {
+      background: var(--primary-gradient);
+      padding: 4px 12px;
+      border-radius: 9999px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+    }
+
+    .hero-overlay h1 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      line-height: 1.3;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .hero-overlay p {
+      font-size: 0.78rem;
+      opacity: 0.9;
+      margin-top: 3px;
+    }
+
+    /* Main Form Card */
+    .card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: var(--shadow);
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(10px);
+    }
+
+    .card-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 20px;
+      color: #4338ca;
+    }
+
+    .card-title img {
+      width: 28px;
+      height: 28px;
+    }
+
+    .card-title h2 {
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: var(--text-dark);
+    }
+
+    input, select {
+      width: 100%;
+      padding: 12px 14px;
+      border: 2px solid #e2e8f0;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      color: var(--text-dark);
+      background: #f8fafc;
+      transition: all 0.25s ease;
+      outline: none;
+    }
+
+    input:focus, select:focus {
+      border-color: #7c3aed;
+      background: #fff;
+      box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.15);
+    }
+
+    .btn-submit {
+      width: 100%;
+      padding: 14px;
+      background: var(--primary-gradient);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 6px 18px rgba(124, 58, 237, 0.35);
+      transition: transform 0.15s ease, opacity 0.2s;
+    }
+
+    .btn-submit:active {
+      transform: scale(0.98);
+    }
+
+    .btn-submit:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+    }
+
+    /* Status Notifications */
+    .status-box {
+      margin-top: 18px;
+      padding: 14px;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      display: none;
+      line-height: 1.4;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .status-box.success {
+      display: block;
+      background: #ecfdf5;
+      color: #065f46;
+      border: 1px solid #6ee7b7;
+    }
+
+    .status-box.error {
+      display: block;
+      background: #fef2f2;
+      color: #991b1b;
+      border: 1px solid #fca5a5;
+    }
+
+    .status-box.info {
+      display: block;
+      background: #eef2ff;
+      color: #3730a3;
+      border: 1px solid #c7d2fe;
+    }
+
+    /* Records & Table */
+    .records-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .records-header h3 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-dark);
+    }
+
+    .btn-export {
+      background: var(--accent-gradient);
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 3px 8px rgba(6, 182, 212, 0.3);
+    }
+
+    .table-wrapper {
+      overflow-x: auto;
+      border-radius: 8px;
+      border: 1px solid #e2e8f0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.78rem;
+      text-align: left;
+    }
+
+    th, td {
+      padding: 10px 12px;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    th {
+      background: #f8fafc;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .tag-present {
+      display: inline-block;
+      padding: 2px 8px;
+      background: #d1fae5;
+      color: #047857;
+      border-radius: 4px;
+      font-weight: 600;
+      font-size: 0.68rem;
+    }
+
+    footer {
+      margin-top: 10px;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    
+    <!-- Hero Banner with Campus / Tech Visual -->
+    <div class="hero-banner">
+      <img src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=1000&q=80" alt="University Campus" />
+      <div class="hero-overlay">
+        <span class="hero-badge">Department of CSE</span>
+        <h1>Veer Bahadur Singh Purvanchal University</h1>
+        <p>Smart Geofenced Attendance System</p>
+      </div>
+    </div>
+
+    <!-- Attendance Form Card -->
+    <main class="card">
+      <div class="card-title">
+        <img src="https://cdn-icons-png.flaticon.com/512/854/854878.png" alt="Map Pin Icon" />
+        <h2>Verify Location & Log In</h2>
+      </div>
+
+      <div class="form-group">
+        <label for="studentName">Student Full Name</label>
+        <input type="text" id="studentName" placeholder="e.g., Your Name" autocomplete="off" />
+      </div>
+
+      <div class="form-group">
+        <label for="rollNumber">University Roll Number</label>
+        <input type="text" id="rollNumber" placeholder="e.g., 230101001" autocomplete="off" />
+      </div>
+
+      <div class="form-group">
+        <label for="semester">Department / Semester</label>
+        <select id="semester">
+          <option value="B.Tech CSE - Sem I">B.Tech CSE - Sem I</option>
+          <option value="B.Tech CSE - Sem II">B.Tech CSE - Sem II</option>
+          <option value="B.Tech CSE - Sem III">B.Tech CSE - Sem III</option>
+          <option value="B.Tech CSE - Sem IV">B.Tech CSE - Sem IV</option>
+          <option value="B.Tech CSE - Sem V">B.Tech CSE - Sem V</option>
+          <option value="B.Tech CSE - Sem VI">B.Tech CSE - Sem VI</option>
+          <option value="B.Tech CSE - Sem VII">B.Tech CSE - Sem VII</option>
+          <option value="B.Tech CSE - Sem VIII">B.Tech CSE - Sem VIII</option>
+        </select>
+      </div>
+
+      <button id="submitBtn" class="btn-submit" onclick="processAttendance()">
+        Verify Coordinates & Mark Attendance
+      </button>
+
+      <div id="statusBox" class="status-box"></div>
+    </main>
+
+    <!-- Verified Logs Card -->
+    <section class="card">
+      <div class="records-header">
+        <h3>Verified Logs (Today)</h3>
+        <button class="btn-export" onclick="exportToCSV()">Export CSV</button>
+      </div>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Roll</th>
+              <th>Student</th>
+              <th>Time</th>
+              <th>Dist</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="attendanceLog">
+            <!-- Data loads here -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <footer>
+      &copy; 2026 Department of Computer Science & Engineering, VBSPU.
+    </footer>
+  </div>
+
+  <script>
+    // VBSPU Coordinates & 200m Zone
+    const TARGET_LAT = 25.828427;
+    const TARGET_LON = 82.674830;
+    const GEOFENCE_RADIUS_METERS = 200;
+
+    // Haversine Distance Formula
+    function computeHaversineDistance(lat1, lon1, lat2, lon2) {
+      const R = 6371e3; // Earth radius in meters
+      const toRad = (angle) => (angle * Math.PI) / 180;
+      
+      const phi1 = toRad(lat1);
+      const phi2 = toRad(lat2);
+      const deltaPhi = toRad(lat2 - lat1);
+      const deltaLambda = toRad(lon2 - lon1);
+
+      const a = Math.sin(deltaPhi / 2) * Math.sin(deltaPhi / 2) +
+                Math.cos(phi1) * Math.cos(phi2) *
+                Math.sin(deltaLambda / 2) * Math.sin(deltaLambda / 2);
+      
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      return Math.round(R * c);
+    }
+
+    function displayStatus(message, variant) {
+      const box = document.getElementById("statusBox");
+      box.className = `status-box ${variant}`;
+      box.innerHTML = message;
+    }
+
+    function loadCachedLogs() {
+      const records = JSON.parse(localStorage.getItem("vbspu_attendance_cache") || "[]");
+      const tbody = document.getElementById("attendanceLog");
+      tbody.innerHTML = "";
+
+      records.forEach((row) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td><strong>${row.roll}</strong></td>
+          <td>${row.name}</td>
+          <td>${row.timestamp}</td>
+          <td>${row.distance}m</td>
+          <td><span class="tag-present">Present</span></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function processAttendance() {
+      const name = document.getElementById("studentName").value.trim();
+      const roll = document.getElementById("rollNumber").value.trim();
+      const semester = document.getElementById("semester").value;
+      const btn = document.getElementById("submitBtn");
+
+      if (!name || !roll) {
+        displayStatus("Missing Info: Please enter both student name and roll number.", "error");
+        return;
+      }
+
+      if (!navigator.geolocation) {
+        displayStatus("Hardware Incompatible: Browser does not support geolocation.", "error");
+        return;
+      }
+
+      btn.disabled = true;
+      displayStatus("Connecting to GPS satellites & calculating distance...", "info");
+
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          btn.disabled = false;
+          const userLat = position.coords.latitude;
+          const userLon = position.coords.longitude;
+          const distance = computeHaversineDistance(userLat, userLon, TARGET_LAT, TARGET_LON);
+
+          if (distance <= GEOFENCE_RADIUS_METERS) {
+            const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            
+            displayStatus(
+              `<strong>Verified!</strong> You are inside the classroom zone.<br>` +
+              `Distance: <strong>${distance} meters</strong> (Limit: ${GEOFENCE_RADIUS_METERS}m)`,
+              "success"
+            );
+
+            // Save record
+            const records = JSON.parse(localStorage.getItem("vbspu_attendance_cache") || "[]");
+            records.unshift({
+              name: name,
+              roll: roll,
+              semester: semester,
+              timestamp: timeStr,
+              distance: distance
+            });
+            localStorage.setItem("vbspu_attendance_cache", JSON.stringify(records));
+            loadCachedLogs();
+          } else {
+            displayStatus(
+              `<strong>Outside Perimeter!</strong><br>` +
+              `Current Distance: <strong>${distance} meters</strong>.<br>` +
+              `You must be within 200m of the classroom to mark attendance.`,
+              "error"
+            );
+          }
+        },
+        (error) => {
+          btn.disabled = false;
+          let msg = "GPS location could not be fetched.";
+          if (error.code === error.PERMISSION_DENIED) {
+            msg = "Permission Denied: Turn on your phone's GPS and allow browser location access.";
+          }
+          displayStatus(`<strong>Error:</strong> ${msg}`, "error");
+        },
+        { enableHighAccuracy: true, timeout: 12000, maximumAge: 0 }
+      );
+    }
+
+    function exportToCSV() {
+      const records = JSON.parse(localStorage.getItem("vbspu_attendance_cache") || "[]");
+      if (records.length === 0) {
+        alert("No attendance records to export.");
+        return;
+      }
+
+      let csvContent = "data:text/csv;charset=utf-8,Roll Number,Name,Semester,Timestamp,Distance (m)\n";
+      records.forEach(r => {
+        csvContent += `"${r.roll}","${r.name}","${r.semester}","${r.timestamp}",${r.distance}\n`;
+      });
+
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", `VBSPU_Attendance_${new Date().toISOString().slice(0, 10)}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    window.addEventListener("DOMContentLoaded", loadCachedLogs);
+  </script>
+</body>
+</html>

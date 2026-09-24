@@ -48,6 +48,7 @@
       gap: 18px;
     }
 
+    /* Top University Header */
     .uni-bar {
       background: var(--card-bg);
       backdrop-filter: blur(10px);
@@ -81,6 +82,7 @@
       margin-top: 2px;
     }
 
+    /* Campus Hero Banner */
     .hero-banner {
       position: relative;
       border-radius: var(--radius);
@@ -132,6 +134,7 @@
       color: #cbd5e1;
     }
 
+    /* Card Panels */
     .card {
       background: var(--card-bg);
       backdrop-filter: blur(12px);
@@ -203,6 +206,7 @@
       cursor: not-allowed;
     }
 
+    /* Alerts */
     .status-alert {
       margin-top: 14px;
       padding: 12px;
@@ -233,6 +237,7 @@
       border: 1px solid #c7d2fe;
     }
 
+    /* Table */
     .logs-header {
       display: flex;
       justify-content: space-between;
@@ -306,9 +311,9 @@
 
   <div class="app-container">
 
+    <!-- University Seal Branding -->
     <header class="uni-bar">
-      <img src="https://upload.wikimedia.org/wikipedia/en/thumb/5/52/Veer_Bahadur_Singh_Purvanchal_University_logo.png/220px-Veer_Bahadur_Singh_Purvanchal_University_logo.png"
-          
+      <img src="https://upload.wikimedia.org/wikipedia/en/thumb/5/52/Veer_Bahadur_Singh_Purvanchal_University_logo.png/220px-Veer_Bahadur_Singh_Purvanchal_University_logo.png" 
            alt="VBSPU Logo" 
            class="uni-logo" 
            onerror="this.src='https://cdn-icons-png.flaticon.com/512/8074/8074788.png'" />
@@ -318,15 +323,17 @@
       </div>
     </header>
 
+    <!-- UNSIET Campus Visual -->
     <section class="hero-banner">
       <img src="https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&w=1000&q=80" alt="UNSIET Campus" />
       <div class="hero-content">
-        <span class="badge">Cloud Synced Portal</span>
+        <span class="badge">Campus Geofencing</span>
         <h1>Smart Attendance Validation</h1>
-        <p>300m Geo-Coordinate Verification Range</p>
+        <p>200m Geo-Coordinate Verification Range</p>
       </div>
     </section>
 
+    <!-- Attendance Form -->
     <main class="card">
       <div class="form-group">
         <label for="studentName">Student Full Name</label>
@@ -381,9 +388,10 @@
       <div id="statusAlert" class="status-alert"></div>
     </main>
 
+    <!-- Records Table -->
     <section class="card">
       <div class="logs-header">
-        <h3>Cloud Database Logs (Live)</h3>
+        <h3>Verified Session Logs</h3>
         <button class="btn-export" onclick="exportToCSV()">Download CSV</button>
       </div>
       <div class="table-container">
@@ -399,11 +407,7 @@
             </tr>
           </thead>
           <tbody id="logTableBody">
-            <tr>
-              <td colspan="6" style="text-align:center; color:#94a3b8; padding: 16px;">
-                Connecting to Cloud Firestore...
-              </td>
-            </tr>
+            <!-- Dynamic Logs -->
           </tbody>
         </table>
       </div>
@@ -414,57 +418,24 @@
     </footer>
   </div>
 
-  <!-- Corrected Firebase Modular SDK via CDN -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-analytics.js";
-    import { 
-      getFirestore, 
-      collection, 
-      addDoc, 
-      query, 
-      orderBy, 
-      onSnapshot, 
-      serverTimestamp 
-    } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
-    // Your web app's Firebase configuration
-    const firebaseConfig = {
-      apiKey: "AIzaSyCOwOK-Hi35Od0dHoiezZk8t5y0uBVs_Zk",
-      authDomain: "unsiet-attendance.firebaseapp.com",
-      projectId: "unsiet-attendance",
-      storageBucket: "unsiet-attendance.firebasestorage.app",
-      messagingSenderId: "1024068545418",
-      appId: "1:1024068545418:web:b5446a26af7524f76a3673",
-      measurementId: "G-YL8TJM6DXW"
-    };
-
-    // Initialize Firebase ONLY ONCE
-    const app = initializeApp(firebaseConfig);
-    const analytics = getAnalytics(app);
-    const db = getFirestore(app);
-
-    let cachedLogs = [];
-
-    // Coordinates & Radius (UNSIET VBSPU)
+  <script>
+    // Exact UNSIET / VBSPU Campus Coordinates
     const CAMPUS_LAT = 25.828427;
     const CAMPUS_LON = 82.674830;
-    const RADIUS_LIMIT = 300; // Meters
+    const RADIUS_LIMIT = 200; // Meters
 
-    // Initialize Realtime Database listener
-    initRealtimeDatabase();
-
-    // Export functions to window so HTML can access them
-    window.handleRollInput = function(elem) {
+    // Strict 11-digit numeric filter
+    function handleRollInput(elem) {
       elem.value = elem.value.replace(/[^0-9]/g, '');
       const counter = document.getElementById("rollCounter");
       counter.innerText = `${elem.value.length} / 11`;
       counter.style.color = elem.value.length === 11 ? "#10b981" : "#2563eb";
-    };
+    }
 
     function haversineDistance(lat1, lon1, lat2, lon2) {
       const R = 6371e3;
       const toRad = (deg) => (deg * Math.PI) / 180;
+      
       const dLat = toRad(lat2 - lat1);
       const dLon = toRad(lon2 - lon1);
 
@@ -482,41 +453,26 @@
       el.innerHTML = message;
     }
 
-    function initRealtimeDatabase() {
+    function renderLogs() {
+      const logs = JSON.parse(localStorage.getItem("unsiet_attendance_db") || "[]");
       const tbody = document.getElementById("logTableBody");
-      const q = query(collection(db, "attendance_records"), orderBy("createdAt", "desc"));
+      tbody.innerHTML = "";
 
-      onSnapshot(q, (snapshot) => {
-        tbody.innerHTML = "";
-        cachedLogs = [];
-
-        if (snapshot.empty) {
-          tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:#94a3b8; padding: 14px;">No records found in database.</td></tr>`;
-          return;
-        }
-
-        snapshot.forEach((docSnap) => {
-          const item = docSnap.data();
-          cachedLogs.push(item);
-
-          const row = document.createElement("tr");
-          row.innerHTML = `
-            <td><strong>${item.roll}</strong></td>
-            <td>${item.name}</td>
-            <td>${item.branch}</td>
-            <td>${item.date} ${item.time}</td>
-            <td>${item.distance}m</td>
-            <td><span class="badge-present">Verified</span></td>
-          `;
-          tbody.appendChild(row);
-        });
-      }, (error) => {
-        console.error("Firestore Listen Error:", error);
-        tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:#ef4444; padding: 14px;">Failed to sync with cloud. Check Firestore Rules.</td></tr>`;
+      logs.forEach(item => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td><strong>${item.roll}</strong></td>
+          <td>${item.name}</td>
+          <td>${item.branch}</td>
+          <td>${item.date} ${item.time}</td>
+          <td>${item.distance}m</td>
+          <td><span class="badge-present">Verified</span></td>
+        `;
+        tbody.appendChild(row);
       });
     }
 
-    window.processAttendance = async function() {
+    function processAttendance() {
       const name = document.getElementById("studentName").value.trim();
       const roll = document.getElementById("rollNumber").value.trim();
       const branch = document.getElementById("branch").value;
@@ -539,55 +495,47 @@
       }
 
       btn.disabled = true;
-      setAlert("Fetching GPS location & verifying UNSIET geofence...", "info");
+      setAlert("Fetching device coordinates & validating against UNSIET geofence...", "info");
 
       navigator.geolocation.getCurrentPosition(
-        async (pos) => {
+        (pos) => {
+          btn.disabled = false;
           const userLat = pos.coords.latitude;
           const userLon = pos.coords.longitude;
           const distance = haversineDistance(userLat, userLon, CAMPUS_LAT, CAMPUS_LON);
 
           if (distance <= RADIUS_LIMIT) {
             const now = new Date();
+            // Formatted Date (DD/MM/YYYY)
             const dateStr = now.toLocaleDateString('en-GB'); 
+            // Formatted 12-hour Time (HH:MM AM/PM)
             const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
 
-            try {
-              // Direct save to Cloud Firestore
-              await addDoc(collection(db, "attendance_records"), {
-                roll: roll,
-                name: name,
-                branch: branch,
-                semester: semester,
-                distance: distance,
-                date: dateStr,
-                time: timeStr,
-                createdAt: serverTimestamp()
-              });
+            setAlert(
+              `<strong>Verified Successfully!</strong><br>` +
+              `Roll: <strong>${roll}</strong> (${branch})<br>` +
+              `Date & Time: <strong>${dateStr} at ${timeStr}</strong><br>` +
+              `Offset Distance: <strong>${distance}m</strong> (Allowed: ${RADIUS_LIMIT}m)`,
+              "success"
+            );
 
-              setAlert(
-                `<strong>Verified & Synced to Cloud!</strong><br>` +
-                `Roll: <strong>${roll}</strong> (${branch})<br>` +
-                `Date & Time: <strong>${dateStr} at ${timeStr}</strong><br>` +
-                `Distance: <strong>${distance}m</strong> (Allowed: ${RADIUS_LIMIT}m)`,
-                "success"
-              );
-
-              document.getElementById("studentName").value = "";
-              document.getElementById("rollNumber").value = "";
-              document.getElementById("rollCounter").innerText = "0 / 11";
-            } catch (err) {
-              console.error("Firestore Save Error:", err);
-              setAlert(`Database Error: Could not save record (${err.message}).`, "error");
-            } finally {
-              btn.disabled = false;
-            }
+            const logs = JSON.parse(localStorage.getItem("unsiet_attendance_db") || "[]");
+            logs.unshift({
+              roll: roll,
+              name: name,
+              branch: branch,
+              semester: semester,
+              distance: distance,
+              date: dateStr,
+              time: timeStr
+            });
+            localStorage.setItem("unsiet_attendance_db", JSON.stringify(logs));
+            renderLogs();
           } else {
-            btn.disabled = false;
             setAlert(
               `<strong>Verification Failed!</strong> Outside boundary.<br>` +
-              `You are <strong>${distance} meters</strong> away from campus hub.<br>` +
-              `Maximum allowed boundary is <strong>${RADIUS_LIMIT}m</strong>.`,
+              `You are <strong>${distance} meters</strong> away from the campus hub.<br>` +
+              `Maximum allowed limit is <strong>${RADIUS_LIMIT}m</strong>.`,
               "error"
             );
           }
@@ -602,27 +550,30 @@
         },
         { enableHighAccuracy: true, timeout: 12000, maximumAge: 0 }
       );
-    };
+    }
 
-    window.exportToCSV = function() {
-      if (cachedLogs.length === 0) {
-        alert("No attendance records to export.");
+    function exportToCSV() {
+      const logs = JSON.parse(localStorage.getItem("unsiet_attendance_db") || "[]");
+      if (logs.length === 0) {
+        alert("No attendance records logged yet.");
         return;
       }
 
       let csv = "data:text/csv;charset=utf-8,Roll Number (11-Digit),Name,Branch,Semester,Date,Time,Distance (m),Status\n";
-      cachedLogs.forEach(l => {
+      logs.forEach(l => {
         csv += `"${l.roll}","${l.name}","${l.branch}","${l.semester}","${l.date}","${l.time}",${l.distance},"Verified"\n`;
       });
 
       const uri = encodeURI(csv);
       const link = document.createElement("a");
       link.setAttribute("href", uri);
-      link.setAttribute("download", `UNSIET_Cloud_Attendance_${new Date().toISOString().slice(0, 10)}.csv`);
+      link.setAttribute("download", `UNSIET_Attendance_${new Date().toISOString().slice(0, 10)}.csv`);
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-    };
+    }
+
+    window.addEventListener("DOMContentLoaded", renderLogs);
   </script>
 </body>
 </html>
