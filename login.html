@@ -50,66 +50,95 @@
             <button onclick="verifyOTP()">Verify & Login</button>
         </div>
     </div>
-
-    <script>
-        // YAHAN APNI FIREBASE DETAILS DALEIN (Firebase console se copy karein)
-      const firebaseConfig = {
-      apiKey: "AIzaSyCOwOK-Hi35Od0dHoiezZk8t5y0uBVs_Zk",
-      authDomain: "unsiet-attendance.firebaseapp.com",
-      projectId: "unsiet-attendance",
-      storageBucket: "unsiet-attendance.firebasestorage.app",
-      messagingSenderId: "1024068545418",
-      appId: "1:1024068545418:web:b5446a26af7524f76a3673",
-      measurementId: "G-YL8TJM6DXW"
+<script>
+    // YAHAN APNI FIREBASE DETAILS DALEIN
+    const firebaseConfig = {
+        apiKey: "AIzaSyCOwOK-Hi35Od0dHoiezZk8t5y0uBVs_Zk", // Isko google cloud console se restrict kar lena
+        authDomain: "unsiet-attendance.firebaseapp.com",
+        projectId: "unsiet-attendance",
+        storageBucket: "unsiet-attendance.firebasestorage.app",
+        messagingSenderId: "1024068545418",
+        appId: "1:1024068545418:web:b5446a26af7524f76a3673",
+        measurementId: "G-YL8TJM6DXW"
     };
 
-        // Firebase Initialize karein
+    // Firebase Initialize karein
+    if (!firebase.apps.length) {
         firebase.initializeApp(firebaseConfig);
-        window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', { 'size': 'normal' });
-        let confirmationResult; 
+    }
 
-        // OTP Bhejne ka function
-        function sendOTP() {
-            const name = document.getElementById("userName").value;
-            const rawNumber = document.getElementById("userNumber").value;
+    let confirmationResult; 
 
-            if (name === "" || rawNumber === "") {
-                alert("Kripya Naam aur Mobile number dono dalein!");
-                return;
-            }
-            if (rawNumber.length !== 10) {
-                alert("Kripya sahi 10-digit mobile number dalein!");
-                return;
-            }
+    // ReCAPTCHA ko function ke andar banayein taaki reset karna aasan ho
+    function renderRecaptcha() {
+        window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', { 
+            'size': 'normal' 
+        });
+        recaptchaVerifier.render();
+    }
+    
+    // Page load hone par ReCAPTCHA render karein
+    window.onload = renderRecaptcha;
 
-            // +91 code automatic add ho jayega
-            const number = "+91" + rawNumber; 
+    // OTP Bhejne ka function
+    function sendOTP() {
+        const name = document.getElementById("userName").value.trim();
+        const rawNumber = document.getElementById("userNumber").value.trim();
 
-            firebase.auth().signInWithPhoneNumber(number, window.recaptchaVerifier)
-                .then((result) => {
-                    confirmationResult = result;
-                    alert("OTP aapke mobile par bhej diya gaya hai!");
-                    document.getElementById("login-section").style.display = "none";
-                    document.getElementById("otp-section").style.display = "block";
-                })
-                .catch((error) => {
-                    console.error(error);
-                    alert("OTP bhejne mein error aaya. Kripya dobara try karein.");
-                });
+        if (name === "" || rawNumber === "") {
+            alert("Kripya Naam aur Mobile number dono dalein!");
+            return;
+        }
+        if (rawNumber.length !== 10) {
+            alert("Kripya sahi 10-digit mobile number dalein!");
+            return;
         }
 
-        // OTP Verify karne ka function
-        function verifyOTP() {
-            const code = document.getElementById("otpCode").value;
+        const number = "+91" + rawNumber; 
 
-            confirmationResult.confirm(code).then((result) => {
-                alert("Login Successful!");
-                // Login hone ke baad automatic main page par bhej dega
+        firebase.auth().signInWithPhoneNumber(number, window.recaptchaVerifier)
+            .then((result) => {
+                confirmationResult = result;
+                alert("OTP aapke mobile par bhej diya gaya hai!");
+                document.getElementById("login-section").style.display = "none";
+                document.getElementById("otp-section").style.display = "block";
+            })
+            .catch((error) => {
+                console.error(error);
+                alert("OTP bhejne mein error aaya. Kripya number check karein ya page refresh karein.");
+                // Error aane par page refresh ya recaptcha reset karna zaroori hai
+                window.location.reload(); 
+            });
+    }
+
+    // OTP Verify karne ka function
+    function verifyOTP() {
+        const code = document.getElementById("otpCode").value.trim();
+        const name = document.getElementById("userName").value.trim();
+
+        if(code === "") {
+            alert("Kripya OTP dalein!");
+            return;
+        }
+
+        confirmationResult.confirm(code).then((result) => {
+            const user = result.user;
+            
+            // YAHAN PAR HUM USER KA NAAM FIREBASE MEIN SAVE KAR RAHE HAIN
+            user.updateProfile({
+                displayName: name
+            }).then(() => {
+                alert("Login Successful! Welcome " + name);
                 window.location.href = "index.html"; 
             }).catch((error) => {
-                alert("Galat OTP! Kripya sahi OTP dalein.");
+                console.log("Naam update karne mein error: ", error);
+                window.location.href = "index.html"; // Fir bhi login karne dein
             });
-        }
-    </script>
+
+        }).catch((error) => {
+            alert("Galat OTP! Kripya sahi OTP dalein.");
+        });
+    }
+</script>
 </body>
 </html>
