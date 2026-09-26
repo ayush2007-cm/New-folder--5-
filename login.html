@@ -50,10 +50,12 @@
             <button onclick="verifyOTP()">Verify & Login</button>
         </div>
     </div>
-<script>
+
+    // YAHAN APNI FIREBASE DETAILS DALEIN
+  <script>
     // YAHAN APNI FIREBASE DETAILS DALEIN
     const firebaseConfig = {
-        apiKey: "AIzaSyCOwOK-Hi35Od0dHoiezZk8t5y0uBVs_Zk", // Isko google cloud console se restrict kar lena
+        apiKey: "AIzaSyCOwOK-Hi35Od0dHoiezZk8t5y0uBVs_Zk", // Isko restrict zarur karna production me
         authDomain: "unsiet-attendance.firebaseapp.com",
         projectId: "unsiet-attendance",
         storageBucket: "unsiet-attendance.firebasestorage.app",
@@ -67,14 +69,22 @@
         firebase.initializeApp(firebaseConfig);
     }
 
+    // CHECK KAREIN KI KYA USER PEHLE SE LOGIN HAI?
+    firebase.auth().onAuthStateChanged((user) => {
+        if (user) {
+            // Agar login hai, toh direct index.html par bhej do
+            window.location.href = "index.html";
+        }
+    });
+
     let confirmationResult; 
 
-    // ReCAPTCHA ko function ke andar banayein taaki reset karna aasan ho
+    // ReCAPTCHA banayein
     function renderRecaptcha() {
         window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', { 
             'size': 'normal' 
         });
-        recaptchaVerifier.render();
+        window.recaptchaVerifier.render(); // Yahan variable name theek kiya gaya hai
     }
     
     // Page load hone par ReCAPTCHA render karein
@@ -105,9 +115,14 @@
             })
             .catch((error) => {
                 console.error(error);
-                alert("OTP bhejne mein error aaya. Kripya number check karein ya page refresh karein.");
-                // Error aane par page refresh ya recaptcha reset karna zaroori hai
-                window.location.reload(); 
+                alert("OTP bhejne mein error aaya. Kripya number check karein aur dobara try karein.");
+                
+                // PAGE RELOAD HATA DIYA HAI, ab sirf Recaptcha reset hoga
+                if(window.recaptchaVerifier) {
+                    window.recaptchaVerifier.render().then(function(widgetId) {
+                        grecaptcha.reset(widgetId);
+                    });
+                }
             });
     }
 
@@ -124,7 +139,7 @@
         confirmationResult.confirm(code).then((result) => {
             const user = result.user;
             
-            // YAHAN PAR HUM USER KA NAAM FIREBASE MEIN SAVE KAR RAHE HAIN
+            // USER KA NAAM UPDATE KAREIN
             user.updateProfile({
                 displayName: name
             }).then(() => {
@@ -132,7 +147,7 @@
                 window.location.href = "index.html"; 
             }).catch((error) => {
                 console.log("Naam update karne mein error: ", error);
-                window.location.href = "index.html"; // Fir bhi login karne dein
+                window.location.href = "index.html"; 
             });
 
         }).catch((error) => {
@@ -140,5 +155,3 @@
         });
     }
 </script>
-</body>
-</html>
