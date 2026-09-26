@@ -427,7 +427,7 @@
       onSnapshot, 
       serverTimestamp 
     } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
     // Your web app's Firebase configuration
     const firebaseConfig = {
       apiKey: "AIzaSyCOwOK-Hi35Od0dHoiezZk8t5y0uBVs_Zk",
@@ -443,7 +443,12 @@
     const app = initializeApp(firebaseConfig);
     const analytics = getAnalytics(app);
     const db = getFirestore(app);
-
+const auth = getAuth(app);
+onAuthStateChanged(auth, (user) => {
+    if (!user) {
+        window.location.href = "login.html";
+    }
+});
     let cachedLogs = [];
 
     // Coordinates & Radius (UNSIET VBSPU)

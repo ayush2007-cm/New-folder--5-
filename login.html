@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; max-width: 400px; margin: auto; background-color: #f4f4f9; }
+        .container { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        input, button { width: 100%; padding: 10px; margin: 10px 0; box-sizing: border-box; }
+        button { background-color: #28a745; color: white; border: none; cursor: pointer; font-size: 16px; border-radius: 4px; }
+        button:hover { background-color: #218838; }
+        .phone-input { display: flex; align-items: center; }
+        .phone-input span { padding: 10px; background: #eee; border: 1px solid #ccc; border-right: none; border-radius: 4px 0 0 4px; }
+        .phone-input input { margin: 0; border-radius: 0 4px 4px 0; border: 1px solid #ccc; }
+        #otp-section { display: none; } /* OTP section pehle hide rahega */
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Login Karein</h2>
+
+        <!-- Step 1: Name aur Mobile Number -->
+        <div id="login-section">
+            <label>Aapka Naam:</label>
+            <input type="text" id="userName" placeholder="Apna naam likhein">
+            
+            <label>Mobile Number:</label>
+            <div class="phone-input">
+                <span>+91</span>
+                <input type="tel" id="userNumber" placeholder="9876543210" maxlength="10">
+            </div>
+            
+            <div id="recaptcha-container"></div>
+            
+            <button onclick="sendOTP()">Send OTP</button>
+        </div>
+
+        <!-- Step 2: OTP Dalne ki jagah -->
+        <div id="otp-section">
+            <label>OTP Darj Karein:</label>
+            <input type="number" id="otpCode" placeholder="6-digit OTP dalein">
+            
+            <button onclick="verifyOTP()">Verify & Login</button>
+        </div>
+    </div>
+
+    <script>
+        // YAHAN APNI FIREBASE DETAILS DALEIN (Firebase console se copy karein)
+      const firebaseConfig = {
+      apiKey: "AIzaSyCOwOK-Hi35Od0dHoiezZk8t5y0uBVs_Zk",
+      authDomain: "unsiet-attendance.firebaseapp.com",
+      projectId: "unsiet-attendance",
+      storageBucket: "unsiet-attendance.firebasestorage.app",
+      messagingSenderId: "1024068545418",
+      appId: "1:1024068545418:web:b5446a26af7524f76a3673",
+      measurementId: "G-YL8TJM6DXW"
+    };
+
+        // Firebase Initialize karein
+        firebase.initializeApp(firebaseConfig);
+        window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', { 'size': 'normal' });
+        let confirmationResult; 
+
+        // OTP Bhejne ka function
+        function sendOTP() {
+            const name = document.getElementById("userName").value;
+            const rawNumber = document.getElementById("userNumber").value;
+
+            if (name === "" || rawNumber === "") {
+                alert("Kripya Naam aur Mobile number dono dalein!");
+                return;
+            }
+            if (rawNumber.length !== 10) {
+                alert("Kripya sahi 10-digit mobile number dalein!");
+                return;
+            }
+
+            // +91 code automatic add ho jayega
+            const number = "+91" + rawNumber; 
+
+            firebase.auth().signInWithPhoneNumber(number, window.recaptchaVerifier)
+                .then((result) => {
+                    confirmationResult = result;
+                    alert("OTP aapke mobile par bhej diya gaya hai!");
+                    document.getElementById("login-section").style.display = "none";
+                    document.getElementById("otp-section").style.display = "block";
+                })
+                .catch((error) => {
+                    console.error(error);
+                    alert("OTP bhejne mein error aaya. Kripya dobara try karein.");
+                });
+        }
+
+        // OTP Verify karne ka function
+        function verifyOTP() {
+            const code = document.getElementById("otpCode").value;
+
+            confirmationResult.confirm(code).then((result) => {
+                alert("Login Successful!");
+                // Login hone ke baad automatic main page par bhej dega
+                window.location.href = "index.html"; 
+            }).catch((error) => {
+                alert("Galat OTP! Kripya sahi OTP dalein.");
+            });
+        }
+    </script>
+</body>
+</html>
