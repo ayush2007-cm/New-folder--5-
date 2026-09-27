@@ -308,7 +308,6 @@
 
     <header class="uni-bar">
       <img src="https://upload.wikimedia.org/wikipedia/en/thumb/5/52/Veer_Bahadur_Singh_Purvanchal_University_logo.png/220px-Veer_Bahadur_Singh_Purvanchal_University_logo.png"
-          
            alt="VBSPU Logo" 
            class="uni-logo" 
            onerror="this.src='https://cdn-icons-png.flaticon.com/512/8074/8074788.png'" />
@@ -427,7 +426,7 @@
       onSnapshot, 
       serverTimestamp 
     } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
-import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
     // Your web app's Firebase configuration
     const firebaseConfig = {
       apiKey: "AIzaSyCOwOK-Hi35Od0dHoiezZk8t5y0uBVs_Zk",
@@ -443,12 +442,7 @@ import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/
     const app = initializeApp(firebaseConfig);
     const analytics = getAnalytics(app);
     const db = getFirestore(app);
-const auth = getAuth(app);
-onAuthStateChanged(auth, (user) => {
-    if (!user) {
-        window.location.href = "login.html";
-    }
-});
+
     let cachedLogs = [];
 
     // Coordinates & Radius (UNSIET VBSPU)
