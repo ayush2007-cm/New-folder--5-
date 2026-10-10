@@ -2,11 +2,14 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
+  
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>UNSIET VBSPU - Geofence Attendance Portal</title>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <meta content="0; url=ui.html">
   <style>
     :root {
       --primary: #1e3a8a;
@@ -306,7 +309,7 @@
 
   <div class="app-container">
 
-    <header class="uni-bar">
+    <header style = background-color:rgb(117,153,177); class="uni-bar">
       <img src="https://upload.wikimedia.org/wikipedia/en/thumb/5/52/Veer_Bahadur_Singh_Purvanchal_University_logo.png/220px-Veer_Bahadur_Singh_Purvanchal_University_logo.png"
            alt="VBSPU Logo" 
            class="uni-logo" 
@@ -340,8 +343,9 @@
         <input 
           type="text" 
           id="rollNumber" 
-          maxlength="11" 
-          placeholder="e.g., 23010101001" 
+          
+          maxlength="11"
+          placeholder="e.g., 23124567889" 
           oninput="handleRollInput(this)" 
           autocomplete="off" 
         />
@@ -621,7 +625,11 @@
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
+  
     };
   </script>
+
+  <a href="ui.html" target="_blank">Home page</a>
+    
 </body>
 </html>

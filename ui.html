@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UNSIET VBSPU-Geofence attendance</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <!-- Custom Tailwind Configuration & Styles -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0fdfa',
+                            100: '#ccfbf1',
+                            500: '#14b8a6', // Teal
+                            600: '#0d9488',
+                            900: '#134e4a',
+                        },
+                        ui: {
+                            bg: '#f8fafc',
+                            surface: '#ffffff',
+                            border: '#e2e8f0',
+                            text: '#0f172a',
+                            textMuted: '#64748b'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: theme('colors.ui.bg');
+            color: theme('colors.ui.text');
+        }
+        
+        /* Custom scrollbar for table wrapper */
+        .custom-scrollbar::-webkit-scrollbar {
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; 
+        }
+
+        /* Toggle Button Animations */
+        .btn-toggle {
+            transition: all 0.2s ease-in-out;
+        }
+        .btn-toggle:active {
+            transform: scale(0.95);
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col">
+
+    <!-- Navigation Bar -->
+    <nav class="bg-white border-b border-ui-border sticky top-0 z-50 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 flex items-center gap-2 text-brand-600">
+                        <i class="ph-fill ph-graduation-cap text-3xl"></i>
+                        <span class="font-bold text-xl tracking-tight text-ui-text">EduSmart</span>
+                    </div>
+                </div>
+                
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex md:items-center md:space-x-8">
+                    <a href="#" class="text-brand-600 font-medium px-3 py-2 rounded-md hover:bg-brand-50 transition-colors">Home</a>
+                    <a href="index.html" class="text-ui-textMuted font-medium hover:text-brand-600 px-3 py-2 rounded-md transition-colors">Attendance</a>
+                    <a href="#notices" class="text-ui-textMuted font-medium hover:text-brand-600 px-3 py-2 rounded-md transition-colors">Notices</a>
+                    <a href="#about" class="text-ui-textMuted font-medium hover:text-brand-600 px-3 py-2 rounded-md transition-colors">About Us</a>
+                </div>
+                
+                <!-- Mobile menu button -->
+                <div class="flex items-center md:hidden">
+                    <button type="button" class="inline-flex items-center justify-center p-2 rounded-md text-ui-textMuted hover:text-brand-600 hover:bg-brand-50 focus:outline-none" aria-controls="mobile-menu" aria-expanded="false" onclick="document.getElementById('mobile-menu').classList.toggle('hidden')">
+                        <i class="ph ph-list text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu (Hidden by default) -->
+        <div class="md:hidden hidden bg-white border-b border-ui-border absolute w-full" id="mobile-menu">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 shadow-lg">
+                <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-brand-600 bg-brand-50">Home</a>
+                <a href="#index.html" class="block px-3 py-2 rounded-md text-base font-medium text-ui-textMuted hover:text-brand-600 hover:bg-brand-50">Attendance</a>
+                <a href="#notices" class="block px-3 py-2 rounded-md text-base font-medium text-ui-textMuted hover:text-brand-600 hover:bg-brand-50">Notices</a>
+                <a href="#about" class="block px-3 py-2 rounded-md text-base font-medium text-ui-textMuted hover:text-brand-600 hover:bg-brand-50">About Us</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Banner -->
+    <header class="relative bg-brand-900 text-white overflow-hidden">
+        <!-- Abstract Background Pattern -->
+        <div class="absolute inset-0 opacity-10">
+            <svg class="h-full w-full" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                    <pattern id="grid-pattern" width="40" height="40" patternUnits="userSpaceOnUse">
+                        <path d="M0 40L40 0H20L0 20M40 40V20L20 40" fill="currentColor" opacity="0.5"/>
+                    </pattern>
+                </defs>
+                <rect width="100%" height="100%" fill="url(#grid-pattern)" />
+            </svg>
+        </div>
+        
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24 flex flex-col items-center text-center">
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 mb-6">
+                <span class="flex h-2 w-2 relative">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                </span>
+                <span class="text-sm font-medium">Academic Year 2026-2027</span>
+            </div>
+            <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight mb-4">
+                Welcome to <span class="text-brand-500">Veer Bahadur Singh Purvanchal University</span>
+            </h1>
+            <p class="mt-4 max-w-2xl text-lg text-brand-100/80 md:text-xl">
+                Empowering minds, shaping futures. Access the daily attendance dashboard, recent notices, and essential school information all in one place.
+            </p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        <!-- Left Sidebar: School Information -->
+        <aside class="lg:col-span-4 space-y-6">
+            
+            <!-- About Us Widget -->
+            <div id="about" class="bg-white rounded-2xl shadow-sm border border-ui-border p-6 hover:shadow-md transition-shadow">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="p-2 bg-brand-50 text-brand-600 rounded-lg">
+                        <i class="ph ph-buildings text-xl"></i>
+                    </div>
+                    <h2 class="text-xl font-semibold text-ui-text">About the University</h2>
+                </div>
+                <p class="text-ui-textMuted text-sm leading-relaxed mb-4">
+                    Veer Bahadur Singh Purvanchal University is committed to providing excellent education with a focus on holistic development. We nurture creativity, critical thinking, and character in every student.
+                </p>
+               
+            </div>
+
+            <!-- Contact Info Widget -->
+            <div class="bg-white rounded-2xl shadow-sm border border-ui-border p-6 hover:shadow-md transition-shadow">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="p-2 bg-blue-50 text-blue-600 rounded-lg">
+                        <i class="ph ph-phone-call text-xl"></i>
+                    </div>
+                    <h2 class="text-xl font-semibold text-ui-text">Contact Info</h2>
+                </div>
+                <div class="space-y-3 text-sm text-ui-textMuted">
+                    <div class="flex items-start gap-3">
+                        <i class="ph ph-map-pin text-lg text-gray-400 mt-0.5"></i>
+                        <p>Veer Bahadur Singh Purvanchal University, Jaunpur, UP, India</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <i class="ph ph-envelope text-lg text-gray-400"></i>
+                        <p>info@vbspu.edu.in</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <i class="ph ph-phone text-lg text-gray-400"></i>
+                        <p>+91 9506132722</p>
+                    </div>
+             
+                </div>
+            </div>
+
+        </aside>
+<div class="lg:col-span-8 flex flex-col gap-6">
+            
+            <!-- Notices Widget -->
+            <div id="notices" class="bg-white rounded-2xl shadow-sm border border-ui-border p-6 hover:shadow-md transition-shadow w-full">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center gap-3">
+                        <div class="p-2 bg-amber-50 text-amber-600 rounded-lg">
+                            <i class="ph ph-megaphone text-xl"></i>
+                        </div>
+                        <h2 class="text-xl font-semibold text-ui-text">Notices</h2>
+                    </div>
+                    <span class="text-xs font-semibold bg-red-100 text-red-600 px-2 py-1 rounded-full">New</span>
+                </div>
+                
+                <ul class="space-y-4">
+                    <li class="border-l-2 border-brand-500 pl-3">
+                        <p class="text-sm font-medium text-ui-text">Diwali Break Announcement</p>
+                        <p class="text-xs text-ui-textMuted mt-1">School will remain closed from Oct 20 to Oct 24.</p>
+                        <p class="text-xs text-brand-600 mt-1"><i class="ph ph-calendar-blank inline"></i> Oct 10, 2026</p>
+                    </li>
+                    <li class="border-l-2 border-gray-200 pl-3">
+                        <p class="text-sm font-medium text-ui-text">Science Fair Registration</p>
+                        <p class="text-xs text-ui-textMuted mt-1">Last date to submit projects is Nov 5.</p>
+                        <p class="text-xs text-ui-textMuted mt-1"><i class="ph ph-calendar-blank inline"></i> Oct 05, 2026</p>
+                    </li>
+                    <li class="border-l-2 border-gray-200 pl-3">
+                        <p class="text-sm font-medium text-ui-text">PTM Scheduled</p>
+                        <p class="text-xs text-ui-textMuted mt-1">Parent-Teacher Meeting for Class 10 on Saturday.</p>
+                        <p class="text-xs text-ui-textMuted mt-1"><i class="ph ph-calendar-blank inline"></i> Oct 01, 2026</p>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Yahan aap aage chalkar Apna Attendance link wala box ya kuch aur daal sakte hain -->
+
+        </div>
+
+
+    </script>
+</body>
+</html>
