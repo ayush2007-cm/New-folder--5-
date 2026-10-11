@@ -18,12 +18,13 @@
       --tech-indigo: #4f46e5;
       --gradient-main: linear-gradient(135deg, #1e3a8a 0%, #4338ca 50%, #f97316 100%);
       --bg-light: #f8fafc;
-      --card-bg: rgba(255, 255, 255, 0.94);
+      --card-bg: rgba(241, 233, 233, 0.94);
       --text-dark: #0f172a;
       --text-muted: #64748b;
       --radius: 16px;
       --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.05);
       --shadow-lg: 0 20px 30px -10px rgba(30, 58, 138, 0.15);
+      --card-bg: linear-gradient(135deg, #d192d9, #764ba2);
     }
 
     * {
@@ -32,17 +33,32 @@
       padding: 0;
       font-family: 'Plus Jakarta Sans', sans-serif;
     }
+body {
+      /* 1. Background gradient (start aur end color same taaki loop seamless chale) */
+      background: linear-gradient(-45deg, #62afc6, #d3b8ad, #ca8f64, #5cbed1);
+      background-size: 300% 300%;
+      animation: bgShift 6s ease infinite;
 
-    body {
-      background: radial-gradient(circle at top right, #e0e7ff, #f8fafc 40%, #ffedd5 100%);
       color: var(--text-dark);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 16px;
+      padding: 20px;
     }
 
+    /* Animation Keyframes (Naam 'bgShift' se match hona zaroori hai) */
+    @keyframes bgShift {
+      0% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
+    }
     .app-container {
       width: 100%;
       max-width: 540px;
@@ -59,7 +75,7 @@
       display: flex;
       align-items: center;
       gap: 14px;
-      border: 1px solid rgba(255, 255, 255, 0.8);
+      border: 1px solid rgba(149, 184, 204, 0.8);
       box-shadow: var(--shadow-sm);
     }
 
@@ -134,15 +150,15 @@
       font-size: 0.74rem;
       color: #cbd5e1;
     }
-
-    .card {
+.card {
       background: var(--card-bg);
       backdrop-filter: blur(12px);
       border-radius: var(--radius);
       padding: 22px;
-      border: 1px solid rgba(255, 255, 255, 0.9);
+      border: 5px solid rgba(136, 178, 13, 0.9);
       box-shadow: var(--shadow-sm);
-    }
+    } 
+   
 
     .form-group {
       margin-bottom: 14px;
@@ -303,20 +319,22 @@
       text-align: center;
       padding: 10px 0 16px;
     }
+       
+
   </style>
 </head>
+
 <body>
-
-  <div class="app-container">
-
-    <header style = background-color:rgb(117,153,177); class="uni-bar">
+  <div>
+    <header style = width:800px;height:100px;border-radius:50px;background:linear-gradient(135deg,#4cc443,#92340c,#f97316); class="uni-bar">
       <img src="https://upload.wikimedia.org/wikipedia/en/thumb/5/52/Veer_Bahadur_Singh_Purvanchal_University_logo.png/220px-Veer_Bahadur_Singh_Purvanchal_University_logo.png"
            alt="VBSPU Logo" 
            class="uni-logo" 
            onerror="this.src='https://vbspu.samarth.ac.in/uploads/uims/f0b4fe2c203f0f4b55cd9432fb8a1433f22b2559ca1cdf6210c2dcdbe1f8ed671_1714456588_43409032_logo.jpg'" />
       <div class="uni-meta">
         <h2>VBS Purvanchal University</h2>
-        <p>Faculty of Engg. & Technology (UNSIET)</p>
+        <p style="font-size: 0.8rem; color: #f1f5f9;">Faculty of Engg. & Technology (UNSIET)</p>
+         <a href="ui.html" target="_blank">Home page</a>
       </div>
     </header>
 
@@ -629,7 +647,7 @@
     };
   </script>
 
-  <a href="ui.html" target="_blank">Home page</a>
+ 
     
 </body>
 </html>

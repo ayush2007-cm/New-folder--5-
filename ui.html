@@ -44,35 +44,28 @@
             }
         }
     </script>
-    <style>
-        body {
-            background-color: theme('colors.ui.bg');
-            color: theme('colors.ui.text');
-        }
-        
-        /* Custom scrollbar for table wrapper */
-        .custom-scrollbar::-webkit-scrollbar {
-            height: 6px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-            background: #f1f1f1; 
-            border-radius: 4px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #cbd5e1; 
-            border-radius: 4px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8; 
+<style
+    type="text/tailwindcss">
+         .text-emerald-900 {
+    --tw-text-opacity: 1;
+    color: rgb(78 12 6 / var(--tw-text-opacity, 1));
+}
+          body {
+
+        font-family: 'Inter', sans-serif;
+
+        background-color: #f8fafc;
+
+        color: #15398b;
+
+    }
+    .animated-hero {
+            background: linear-gradient(-45deg, #8db989, #e6ac95, #b08261, #88c483);
+            background-size: 300% 300%;
+            animation: heroGradientShift 8s ease infinite;
         }
 
-        /* Toggle Button Animations */
-        .btn-toggle {
-            transition: all 0.2s ease-in-out;
-        }
-        .btn-toggle:active {
-            transform: scale(0.95);
-        }
+     
     </style>
 </head>
 <body class="antialiased min-h-screen flex flex-col">
@@ -118,33 +111,30 @@
     </nav>
 
     <!-- Hero Banner -->
-    <header class="relative bg-brand-900 text-white overflow-hidden">
-        <!-- Abstract Background Pattern -->
-        <div class="absolute inset-0 opacity-10">
-            <svg class="h-full w-full" xmlns="http://www.w3.org/2000/svg">
-                <defs>
-                    <pattern id="grid-pattern" width="40" height="40" patternUnits="userSpaceOnUse">
-                        <path d="M0 40L40 0H20L0 20M40 40V20L20 40" fill="currentColor" opacity="0.5"/>
-                    </pattern>
-                </defs>
-                <rect width="100%" height="100%" fill="url(#grid-pattern)" />
-            </svg>
-        </div>
+    <header class="relative overflow-hidden animated-hero shadow-sm"
+    class="relative text-slate-800 overflow-hidden shadow-sm" >
         
-        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24 flex flex-col items-center text-center">
-            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 mb-6">
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-20 flex flex-col items-center text-center">
+            
+            <!-- 1. Academic Year Badge -->
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/40 backdrop-blur-sm border border-white/40 mb-6 shadow-sm">
                 <span class="flex h-2 w-2 relative">
-                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                    <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-green-600"></span>
                 </span>
-                <span class="text-sm font-medium">Academic Year 2026-2027</span>
+                <span class="text-sm font-semibold text-slate-800">Academic Year 2026-2027</span>
             </div>
-            <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight mb-4">
-                Welcome to <span class="text-brand-500">Veer Bahadur Singh Purvanchal University</span>
+
+            <!-- 2. Main Heading -->
+            <h1 class="text-3xl md:text-5xl lg:text-6xl font-extrabold tracking-tight mb-4 text-slate-900 leading-tight">
+                Welcome to <span class="text-emerald-900">Veer Bahadur Singh Purvanchal University</span>
             </h1>
-            <p class="mt-4 max-w-2xl text-lg text-brand-100/80 md:text-xl">
+
+            <!-- 3. Centered Empowering Paragraph -->
+            <p class="mt-2 max-w-2xl text-base md:text-lg text-slate-800/90 font-medium leading-relaxed mx-auto text-center">
                 Empowering minds, shaping futures. Access the daily attendance dashboard, recent notices, and essential school information all in one place.
             </p>
+
         </div>
     </header>
 
