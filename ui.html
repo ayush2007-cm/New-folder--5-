@@ -63,7 +63,18 @@
             background: linear-gradient(-45deg, #8db989, #e6ac95, #b08261, #88c483);
             background-size: 300% 300%;
             animation: heroGradientShift 8s ease infinite;
-        }
+        } 
+        @keyframes heroGradientShift {
+      0% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
+    }
 
      
     </style>
