@@ -24,7 +24,7 @@
       --radius: 16px;
       --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.05);
       --shadow-lg: 0 20px 30px -10px rgba(30, 58, 138, 0.15);
-      --card-bg: linear-gradient(135deg, #d192d9, #764ba2);
+      --card-bg: linear-gradient(135deg, #f2f0f2, #f6f0fc);
     }
 
     * {
@@ -34,31 +34,19 @@
       font-family: 'Plus Jakarta Sans', sans-serif;
     }
 body {
-      /* 1. Background gradient (start aur end color same taaki loop seamless chale) */
-      background: linear-gradient(-45deg, #62afc6, #d3b8ad, #ca8f64, #5cbed1);
+    /* Mobile screen (768px ya usse kam) ke liye */
+      background: linear-gradient(white);
+           
       background-size: 300% 300%;
-      animation: bgShift 6s ease infinite;
-
+    
       color: var(--text-dark);
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
       padding: 20px;
-    }
 
-    /* Animation Keyframes (Naam 'bgShift' se match hona zaroori hai) */
-    @keyframes bgShift {
-      0% {
-        background-position: 0% 50%;
-      }
-      50% {
-        background-position: 100% 50%;
-      }
-      100% {
-        background-position: 0% 50%;
-      }
-    }
+} 
     .app-container {
       width: 100%;
       max-width: 540px;
@@ -155,7 +143,7 @@ body {
       backdrop-filter: blur(12px);
       border-radius: var(--radius);
       padding: 22px;
-      border: 5px solid rgba(136, 178, 13, 0.9);
+      border: 1px solid rgba(136, 178, 13, 0.9);
       box-shadow: var(--shadow-sm);
     } 
    
@@ -325,8 +313,10 @@ body {
 </head>
 
 <body>
+  <div class="app-container">
+   
   <div>
-    <header style = width:800px;height:100px;border-radius:50px;background:linear-gradient(135deg,#4cc443,#92340c,#f97316); class="uni-bar">
+    <header style = width:550px;height:100px;border-radius:50px;background:linear-gradient(135deg,#14b8a6); class="uni-bar">
       <img src="https://upload.wikimedia.org/wikipedia/en/thumb/5/52/Veer_Bahadur_Singh_Purvanchal_University_logo.png/220px-Veer_Bahadur_Singh_Purvanchal_University_logo.png"
            alt="VBSPU Logo" 
            class="uni-logo" 

@@ -54,29 +54,11 @@
 
         font-family: 'Inter', sans-serif;
 
-        background-color: #f8fafc;
+        background-color: #f9fbfd;
 
-        color: #15398b;
+        color: #063ab4;
 
     }
-    .animated-hero {
-            background: linear-gradient(-45deg, #8db989, #e6ac95, #b08261, #88c483);
-            background-size: 300% 300%;
-            animation: heroGradientShift 8s ease infinite;
-        } 
-        @keyframes heroGradientShift {
-      0% {
-        background-position: 0% 50%;
-      }
-      50% {
-        background-position: 100% 50%;
-      }
-      100% {
-        background-position: 0% 50%;
-      }
-    }
-
-     
     </style>
 </head>
 <body class="antialiased min-h-screen flex flex-col">
@@ -84,19 +66,22 @@
     <!-- Navigation Bar -->
     <nav class="bg-white border-b border-ui-border sticky top-0 z-50 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16">
+            <div class="flex justify-between h-16 items-center">
                 <!-- Logo -->
                 <div class="flex items-center">
                     <div class="flex-shrink-0 flex items-center gap-2 text-brand-600">
-                        <i class="ph-fill ph-graduation-cap text-3xl"></i>
-                        <span class="font-bold text-xl tracking-tight text-ui-text">EduSmart</span>
+                        <i class="uni-logo"></i>
+                         <img src="https://upload.wikimedia.org/wikipedia/en/thumb/5/52/Veer_Bahadur_Singh_Purvanchal_University_logo.png/220px-Veer_Bahadur_Singh_Purvanchal_University_logo.png"
+                          alt="VBSPU Logo" class="h-10 w-auto"
+                           onerror="this.src='https://vbspu.samarth.ac.in/uploads/uims/f0b4fe2c203f0f4b55cd9432fb8a1433f22b2559ca1cdf6210c2dcdbe1f8ed671_1714456588_43409032_logo.jpg'" />
+                        <span class="font-bold text-xl tracking-tight text-ui-text">VBSPU</span>
                     </div>
                 </div>
-                
+
                 <!-- Desktop Menu -->
                 <div class="hidden md:flex md:items-center md:space-x-8">
                     <a href="#" class="text-brand-600 font-medium px-3 py-2 rounded-md hover:bg-brand-50 transition-colors">Home</a>
-                    <a href="attendence.html" class="text-ui-textMuted font-medium hover:text-brand-600 px-3 py-2 rounded-md transition-colors">Attendance</a>
+                    <a href="attendance.html" class="text-ui-textMuted font-medium hover:text-brand-600 px-3 py-2 rounded-md transition-colors">Attendance</a>
                     <a href="#notices" class="text-ui-textMuted font-medium hover:text-brand-600 px-3 py-2 rounded-md transition-colors">Notices</a>
                     <a href="#about" class="text-ui-textMuted font-medium hover:text-brand-600 px-3 py-2 rounded-md transition-colors">About Us</a>
                 </div>
@@ -114,7 +99,7 @@
         <div class="md:hidden hidden bg-white border-b border-ui-border absolute w-full" id="mobile-menu">
             <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 shadow-lg">
                 <a href="#" class="block px-3 py-2 rounded-md text-base font-medium text-brand-600 bg-brand-50">Home</a>
-                <a href="#attendence.html" class="block px-3 py-2 rounded-md text-base font-medium text-ui-textMuted hover:text-brand-600 hover:bg-brand-50">Attendance</a>
+                <a href="#attendance.html" class="block px-3 py-2 rounded-md text-base font-medium text-ui-textMuted hover:text-brand-600 hover:bg-brand-50">Attendance</a>
                 <a href="#notices" class="block px-3 py-2 rounded-md text-base font-medium text-ui-textMuted hover:text-brand-600 hover:bg-brand-50">Notices</a>
                 <a href="#about" class="block px-3 py-2 rounded-md text-base font-medium text-ui-textMuted hover:text-brand-600 hover:bg-brand-50">About Us</a>
             </div>
@@ -123,7 +108,8 @@
 
     <!-- Hero Banner -->
     <header class="relative overflow-hidden animated-hero shadow-sm"
-    class="relative text-slate-800 overflow-hidden shadow-sm" >
+    class="relative text-slate-800 overflow-hidden shadow-sm"
+    style="background: linear-gradient(135deg, #14b8a6 0%, #0d9488 100%);">
         
         <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-20 flex flex-col items-center text-center">
             
@@ -211,19 +197,19 @@
                 
                 <ul class="space-y-4">
                     <li class="border-l-2 border-brand-500 pl-3">
-                        <p class="text-sm font-medium text-ui-text">Diwali Break Announcement</p>
-                        <p class="text-xs text-ui-textMuted mt-1">School will remain closed from Oct 20 to Oct 24.</p>
-                        <p class="text-xs text-brand-600 mt-1"><i class="ph ph-calendar-blank inline"></i> Oct 10, 2026</p>
+                        <p class="text-sm font-medium text-ui-text">Admission Open</p>
+                        <p class="text-xs text-ui-textMuted mt-1">Concession applications can be submitted from Oct 20 to Oct 24.</p>
+                        <p class="text-xs text-brand-600 mt-1"><i class="ph ph-calendar-blank inline"></i> Oct 12, 2026</p>
                     </li>
                     <li class="border-l-2 border-gray-200 pl-3">
-                        <p class="text-sm font-medium text-ui-text">Science Fair Registration</p>
+                        <p class="text-sm font-medium text-ui-text">Project Submission Deadline</p>
                         <p class="text-xs text-ui-textMuted mt-1">Last date to submit projects is Nov 5.</p>
-                        <p class="text-xs text-ui-textMuted mt-1"><i class="ph ph-calendar-blank inline"></i> Oct 05, 2026</p>
+                        <p class="text-xs text-brand-600 mt-1"><i class="ph ph-calendar-blank inline"></i> Nov 5, 2026</p>
                     </li>
                     <li class="border-l-2 border-gray-200 pl-3">
-                        <p class="text-sm font-medium text-ui-text">PTM Scheduled</p>
-                        <p class="text-xs text-ui-textMuted mt-1">Parent-Teacher Meeting for Class 10 on Saturday.</p>
-                        <p class="text-xs text-ui-textMuted mt-1"><i class="ph ph-calendar-blank inline"></i> Oct 01, 2026</p>
+                        <p class="text-sm font-medium text-ui-text">Fresher Party</p>
+                        <p class="text-xs text-ui-textMuted mt-1">Join us for the annual fresher party!</p>
+                        <p class="text-xs text-brand-600 mt-1"><i class="ph ph-calendar-blank inline"></i> Nov 12, 2026</p>
                     </li>
                 </ul>
             </div>
